@@ -60,7 +60,10 @@ function Pause-Execution {
 try {
     Write-Log "Elevated script started. Debug mode: `$Debug"
     Write-Log "Current user: `$(`$env:USERNAME)"
-    Write-Log "Running as administrator: `$([Security.Principal.WindowsPrincipal]([Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator))"
+    `$windowsIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    `$windowsPrincipal = New-Object Security.Principal.WindowsPrincipal(`$windowsIdentity)
+    `$isAdminCheck = `$windowsPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+    Write-Log "Running as administrator: `$isAdminCheck"
     
     # Set repo and .bat filename
     `$repoOwner = "Batlez"
